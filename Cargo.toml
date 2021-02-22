@@ -1,0 +1,15 @@
+[package]
+name = "fade"
+version = "0.1.0"
+authors = ["Michal 'vorner' Vaner <vorner@vorner.cz>"]
+edition = "2018"
+license = "Apache-2.0/MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rayon = "1"
+slipstream = "0.1"
+multiversion = "0.6"
+rand = "0.8"
+structopt = "0.3"
