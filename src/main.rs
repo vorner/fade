@@ -58,20 +58,27 @@ struct Opts {
     size: usize,
 }
 
+fn alloc(cnt: usize) -> Vec<C> {
+    (0..cnt)
+        .into_par_iter()
+        .map(|_| C::default())
+        .collect()
+}
+
 fn main() {
     let opts = Opts::from_args();
     let cnt = opts.size * 1024 * 1024 * 1024 / mem::size_of::<C>();
     let start = Instant::now();
     eprintln!("Start");
-    let mut v = vec![C::default(); cnt];
+    let mut v = alloc(cnt);
     eprintln!("{:?} Alloc", start.elapsed());
     for i in 0..64 * 8 {
         patt(&mut v, i);
         eprintln!("{:?} Checked pattern with offset {}", start.elapsed(), i);
     }
     drop(v);
-    let mut v1 = vec![C::default(); cnt / 2];
-    let mut v2 = vec![C::default(); cnt / 2];
+    let mut v1 = alloc(cnt / 2);
+    let mut v2 = alloc(cnt / 2);
     eprintln!("{:?} Alloc", start.elapsed());
     set(&mut v1, 0);
     let mut pat = 0;
