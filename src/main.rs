@@ -1,4 +1,7 @@
+#![feature(test)]
+
 use std::mem;
+use std::hint::black_box;
 use std::time::{Duration, Instant};
 use slipstream::prelude::*;
 use rayon::prelude::*;
@@ -22,7 +25,7 @@ fn set(data: &mut Vec<C>, pat: usize) {
 #[clone(target = "x86+sse")]
 fn check(data: &Vec<C>, pat: usize) {
     data.par_iter().enumerate().for_each(|(i, d)| {
-        assert_eq!(*d, C::splat(i ^ pat));
+        assert_eq!(black_box(*d), C::splat(i ^ pat), "Check failed at {}", i);
     })
 }
 
@@ -40,14 +43,14 @@ fn patt(data: &mut Vec<C>, offset: u32) {
     });
     let neg = !val;
     data.par_iter_mut().for_each(|d| {
-        assert_eq!(*d, val);
+        assert_eq!(black_box(*d), val, "Patt failed at positive");
         *d = neg;
     });
     data.par_iter_mut().for_each(|d| {
         *d = neg;
     });
     data.par_iter().for_each(|d| {
-        assert_eq!(*d, neg);
+        assert_eq!(black_box(*d), neg, "Patt failed at negative");
     })
 }
 
