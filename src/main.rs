@@ -1,4 +1,4 @@
-#![feature(test)]
+#![feature(bench_black_box)]
 
 use std::mem;
 use std::hint::black_box;
